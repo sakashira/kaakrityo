@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 検索除け -->
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>落とせ！天然上司</title>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1>.★落とせ！天然上司★.</h1>
+    <canvas id="myCanvas" width="600" height="480"></canvas>
+    <div id="text"></div>
+    <div id="choice"></div>
+    <script>
+        /*制作意図
+        当初はコミュニケーションアプリを予定し、
+        そちらのほうを制作していたが、
+        直前になって急に出し惜しみしてしまい、
+        簡単なゲームの制作に切り替えた。
+        イライラ棒が作りたかったが、ネットにいいソースが落ちていなくて
+        断念し一晩で急遽こちらを制作。
+        でもやっぱりノベルゲームもまんま使えるいいソースはおちていなかった……。
+        開き直ってもうオリジナルレシピです。
+
+        制作時間：８時間くらい（図やシナリオで２時間、コード打ちで６時間。）
+        */
+
+        //ストリクトモード
+        "use strict";
+
+        //キャンバスの定義(キャンバスで描写しているのは最初テキストを入れ込みたかったという名残り)
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        //イメージの描写
+        let image = new Image();
+        image.onload = () => {
+            ctx.drawImage(image, 0, 0);
+        };
+
+        //好感度ポイント
+        let love;
+
+        //ゲーム開始のファンクション
+        function goJoshi() {
+            //ここでloveをリセット
+            love = 0;
+            console.log(love);
+            //２秒間待ってね
+            document.getElementById('text').innerHTML = 'はっじまるよ〜♪';
+            document.getElementById('choice').innerHTML = ' ';
+            //タイトル画像を書く
+            image.src = 'img/title.png';
+            //２秒後に開始(ここで前の画像が生き残っているのが修正課題。canvas.removeが効かないのなぜ。)
+            const start = function () {
+                image.src = 'img/1.png';
+                //テキストを描画
+                document.getElementById('text').innerHTML = "「おはよう！いい天気だね！」";
+                document.getElementById('choice').innerHTML = '<button onclick="one()">係長、傘どうぞ</button><br><button onclick="one2()">どうみても雨ですよまた傘忘れたんですか。</button>';
+            };
+            setTimeout(start, 2000);
+        }
+
+        goJoshi();
+
+        //ポイント追加のファンクション
+
+        function pointPlus() {
+            love = love + 1;
+            console.log(love);
+        };
+
+        function pointMin() {
+            love = love - 1;
+            console.log(love);
+        };
+
+        //各エンドのファンクション
+
+        function bad() {
+            image.src = 'img/bad.png';
+            document.getElementById('text').innerHTML = '係長は俺の態度にすっかり気落ちしてしまい、<br>それ以降から毎日俺とゴマちゃん人形を間違えるようになった…<br>俺は課長に資料室に異動を命じられた…<br>埃っぽい資料室……一人だけの空間……<br>係長のあの脂っぽい笑顔が懐かしい……';
+            document.getElementById('choice').innerHTML = '<button onclick="goJoshi()">おわり</button>';
+        }
+
+        function nml() {
+            image.src = 'img/nml.png';
+            document.getElementById('text').innerHTML = '翌週、また★先生の所に行った。<br>今度はノロウイルスのパンフレットをずっと見ていたが、少しだけ資料も見てくれた。<br>係長とこれからも少しずつがんばっていこう……';
+            document.getElementById('choice').innerHTML = '<button onclick="goJoshi()">おわり</button>';
+        }
+
+        function good() {
+            image.src = 'img/good.png';
+            document.getElementById('text').innerHTML = '翌週、★先生の所に行ったが、先週と資料の食いつきが格段に違った。<br>きっと俺たちの愛のプレゼンパワーが先生に通じたのだろう。即契約だった。<br>係長と俺はこれからもずっと<b>BEST FRIENDS……</b>元気出していきましょう。';
+            document.getElementById('choice').innerHTML = '<button onclick="goJoshi()">おわり</button>';
+        }
+
+
+        //ゲーム進行のファンクション（ボタンでファンクションが起こされる式）
+
+        function one() {
+            pointPlus();
+            image.src = 'img/2.png';
+            document.getElementById('text').innerHTML = '「ちょっと勤務前に一缶どうだい？」';
+            document.getElementById('choice').innerHTML = '<button onclick="twe()">いただきます。（まずいな……）</button><br><button onclick="twe2()">（まずそうなので無視）</button>';
+        }
+
+        function one2() {
+            pointMin();
+            image.src = 'img/2.png';
+            document.getElementById('text').innerHTML = '「ちょっと勤務前に一缶どうだい？」';
+            document.getElementById('choice').innerHTML = '<button onclick="twe()">いただきます。（まずいな……）</button><br><button onclick="twe2()">（まずそうなので無視）</button>';
+        }
+
+        function twe() {
+            pointPlus();
+            image.src = 'img/3.png';
+            document.getElementById('text').innerHTML = '「今日は★★医院の★先生へ新薬の説明だ！」';
+            document.getElementById('choice').innerHTML = '<button onclick="three()">はい！一緒に営業行きます！ </button><br><button onclick="three2()">わかりました、俺事務作業やっておくんで。</button>';
+        }
+
+        function twe2() {
+            pointMin();
+            image.src = 'img/3.png';
+            document.getElementById('text').innerHTML = '「今日は★★医院の★先生へ新薬の説明だ！」';
+            document.getElementById('choice').innerHTML = '<button onclick="three()">はい！一緒に営業行きます！ </button><br><button onclick="three2()">わかりました、俺事務作業やっておくんで。</button>';
+        }
+
+        function three() {
+            pointPlus();
+            image.src = 'img/4.png';
+            document.getElementById('text').innerHTML = '「★先生、新薬の説明中ずっとピロリ菌のポスター見てたな……」';
+            document.getElementById('choice').innerHTML = '<button onclick="four()">あんたの資料がピロリ菌以下ってことでしょ</button><br><button onclick="four2()">悔しいですね、自分、新しい資料頑張って作ります。</button>';
+        }
+
+        function three2() {
+            pointMin();
+            image.src = 'img/4.png';
+            document.getElementById('text').innerHTML = '「★先生、新薬の説明中ずっとピロリ菌のポスター見てたな……」';
+            document.getElementById('choice').innerHTML = '<button onclick="four()">あんたの資料がピロリ菌以下ってことでしょ</button><br><button onclick="four2()">悔しいですね、自分、新しい資料頑張って作ります。</button>';
+        }
+
+        //ゲーム進行のファンクションここから分岐ルート入ります。
+        function four() {
+            pointMin();
+            if (love < -2) {
+                bad();
+            } else {
+                document.getElementById('text').innerHTML = '「ピロリ菌と新薬、何が違うんだろう…」';
+                document.getElementById('choice').innerHTML = '<button onclick="five()">あんたのプレゼンが悪くないですか？</button><br><button onclick="five2()">係長……</button>';
+                image.src = 'img/5.png';
+            }
+        }
+
+        function four2() {
+            pointPlus();
+            if (love < -2) {
+                bad();
+            } else {
+                document.getElementById('text').innerHTML = '「ピロリ菌と新薬、何が違うんだろう…」';
+                document.getElementById('choice').innerHTML = '<button onclick="five()">あんたのプレゼンが悪くないですか？</button><br><button onclick="five2()">係長……</button>';
+                image.src = 'img/5.png';
+            }
+        }
+
+        function five() {
+            love = love - 2;
+            console.log(love);
+            if (love < -2) {
+                bad();
+            } if (love < 0 && love >= -2) {
+                nml();
+            } else {
+                document.getElementById('text').innerHTML = '「すまない、私、プレゼンもっと頑張るから……応援してくれるかい？」';
+                document.getElementById('choice').innerHTML = '<button onclick="six()">しょうがないなあ</button><br><button onclick="six2()">もちろん！俺もプレゼン手伝います！</button>';
+                image.src = 'img/6.png';
+            }
+        }
+
+        function five2() {
+            console.log(love);
+            if (love < -2) {
+                bad();
+            } if (love < 0 && love >= -2) {
+                nml();
+            } else {
+                document.getElementById('text').innerHTML = '「すまない、私、プレゼンもっと頑張るから……応援してくれるかい？」';
+                document.getElementById('choice').innerHTML = '<button onclick="six()">しょうがないなあ</button><br><button onclick="six2()">もちろん！俺もプレゼン手伝います！</button>';
+                image.src = 'img/6.png';
+            }
+        }
+
+        function six() {
+            console.log(love);
+            if (love > 3) {
+                good();
+            } else {
+                nml();
+            }
+        }
+
+        function six2() {
+            love = love + 2;
+            console.log(love);
+            if (love > 3) {
+                good();
+            } else {
+                nml();
+            }
+        }
+
+    </script>
+
+</body>
+<footer><small>&copy;2021 Natyuka Design</small></footer>
+
+</html>

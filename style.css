@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+body{
+    margin: 0;
+    padding: 20px;
+    background-color: rgb(255, 85, 141);
+}
+
+h1{
+    margin: 5px;
+    font-family: 'DotGothic16';
+    font-size: 50px;
+    color: #FFF;
+}
+
+#text{
+    font-family: 'Hachi Maru Pop';
+    color: rgb(255, 85, 141);
+    width: 570px;
+    font-size: 26px;
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+button{
+    margin-bottom: 5px;
+    padding: 5px;
+    color: #000;
+    font-size: 16px;
+    background-color: #fceaff;
+    border-color: rgb(255, 130, 213);
+    border-radius: 5px;
+    border-style: none;
+}
+
+button:hover {
+    background: #f8adff;
+}
+
+footer{
+    font-size: 10px;
+    color: #FFF;
+}
